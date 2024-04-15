@@ -5,6 +5,10 @@ import { useForm } from "react-hook-form";
 type FormValues = {
 	username: string;
 	email: string;
+	social: {
+		instagram: string;
+		twitter: string;
+	};
 };
 
 const UserDetailsForm = () => {
@@ -14,6 +18,10 @@ const UserDetailsForm = () => {
 		defaultValues: {
 			username: "",
 			email: "",
+			social: {
+				instagram: "",
+				twitter: "",
+			},
 		},
 	});
 
@@ -68,6 +76,30 @@ const UserDetailsForm = () => {
 						})}
 					/>
 					<p className="text-red-500">{errors.email?.message}</p>
+				</div>
+
+				{/* Nested fields */}
+				<div className="form-control">
+					<label htmlFor="instagram">Instagram</label>
+					<input
+						type="text"
+						id="instagram"
+						{...register("social.instagram", {
+							required: "Instagram username is required",
+						})}
+					/>
+					<p className="text-red-500">{errors.social?.instagram?.message}</p>
+				</div>
+				<div className="form-control">
+					<label htmlFor="twitter">Twitter</label>
+					<input
+						type="text"
+						id="twitter"
+						{...register("social.twitter", {
+							required: "Twitter handle is required",
+						})}
+					/>
+					<p className="text-red-500">{errors.social?.twitter?.message}</p>
 				</div>
 				<div>
 					<button className="px-4 py-2 bg-indigo-700 text-white rounded-md">
