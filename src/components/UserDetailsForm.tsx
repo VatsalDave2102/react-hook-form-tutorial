@@ -42,8 +42,8 @@ const UserDetailsForm = () => {
 							required: { value: true, message: "Username is required" },
 						})}
 					/>
-					<p className="text-red-500">{errors.username?.message}</p> //to
-					display error message
+					{/* to display error messages */}
+					<p className="text-red-500">{errors.username?.message}</p>
 				</div>
 				<div className="form-control">
 					<label htmlFor="email">Email</label>
@@ -56,6 +56,14 @@ const UserDetailsForm = () => {
 								value:
 									/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
 								message: "Invalid email format",
+							},
+							validate: {
+								noAdmin: (fieldValue) => {
+									return (
+										fieldValue !== "admin@example.com" ||
+										"Enter a different email address"
+									);
+								},
 							},
 						})}
 					/>
