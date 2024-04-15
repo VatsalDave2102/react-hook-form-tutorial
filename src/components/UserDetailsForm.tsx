@@ -1,10 +1,11 @@
+import { DevTool } from "@hookform/devtools";
 import { useForm } from "react-hook-form";
 
 const UserDetailsForm = () => {
 	// for managing forms with ease
 	const form = useForm();
 
-	const { register } = form;
+	const { register, control } = form;
 
 	// register method allows registering an input element and apply validation rules to react hook form,
 	// register itself return 4 properties, rather than this destructure register on the input itself
@@ -27,6 +28,7 @@ const UserDetailsForm = () => {
 					</button>
 				</div>
 			</form>
+			<DevTool control={control} />
 		</div>
 	);
 };
