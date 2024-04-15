@@ -15,6 +15,8 @@ type FormValues = {
 	hobbies: {
 		hobby: string;
 	}[];
+	age: number;
+	dob: Date;
 };
 
 const UserDetailsForm = () => {
@@ -30,6 +32,8 @@ const UserDetailsForm = () => {
 			},
 			phoneNumbers: ["", ""],
 			hobbies: [{ hobby: "" }],
+			age: 0,
+			dob: new Date(),
 		},
 	});
 
@@ -91,7 +95,6 @@ const UserDetailsForm = () => {
 					/>
 					<p className="text-red-500">{errors.email?.message}</p>
 				</div>
-
 				{/* Nested fields */}
 				<div className="form-control">
 					<label htmlFor="instagram">Instagram</label>
@@ -121,7 +124,6 @@ const UserDetailsForm = () => {
 					/>
 					<p className="text-red-500">{errors.social?.twitter?.message}</p>
 				</div>
-
 				{/* Array fields */}
 				<div className="form-control">
 					<label htmlFor="primary-phone">Primary phone number</label>
@@ -155,7 +157,6 @@ const UserDetailsForm = () => {
 						{errors.phoneNumbers ? errors.phoneNumbers[1]?.message : ""}
 					</p>
 				</div>
-
 				{/* dynamic fields */}
 				<label htmlFor="hobbies">Hobbies</label>
 				<div>
@@ -198,6 +199,36 @@ const UserDetailsForm = () => {
 					>
 						Add another hobby
 					</button>
+				</div>
+
+				{/* input as number */}
+				<div className="form-control">
+					<label htmlFor="age">Age</label>
+					<input
+						type="number"
+						id="age"
+						{...register("age", {
+							valueAsNumber: true, // to take input as number
+							required: {
+								value: true,
+								message: "Age is required",
+							},
+						})}
+					/>
+					<p className="text-red-500">{errors.age?.message}</p>
+				</div>
+				{/* input as date field */}
+				<div className="form-control">
+					<label htmlFor="dob">Date of birth</label>
+					<input
+						type="date"
+						id="dob"
+						{...register("dob", {
+							valueAsDate: true, // to take input as date
+							required: { value: true, message: "Date of birth is required" },
+						})}
+					/>
+					<p className="text-red-500">{errors.dob?.message}</p>
 				</div>
 				<div>
 					<button className="px-4 py-2 bg-indigo-700 text-white rounded-md">
