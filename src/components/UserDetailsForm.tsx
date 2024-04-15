@@ -17,7 +17,9 @@ const UserDetailsForm = () => {
 		},
 	});
 
-	const { register, control, handleSubmit } = form;
+	const { register, control, handleSubmit, formState } = form;
+
+	const { errors } = formState; //formstate contains info about entire form state, helps to keep on track with user's interaction
 
 	// function to handle validated form data
 	const onSubmitHandler = (formdata: FormValues) => {
@@ -40,6 +42,8 @@ const UserDetailsForm = () => {
 							required: { value: true, message: "Username is required" },
 						})}
 					/>
+					<p className="text-red-500">{errors.username?.message}</p> //to
+					display error message
 				</div>
 				<div className="form-control">
 					<label htmlFor="email">Email</label>
@@ -55,6 +59,7 @@ const UserDetailsForm = () => {
 							},
 						})}
 					/>
+					<p className="text-red-500">{errors.email?.message}</p>
 				</div>
 				<div>
 					<button className="px-4 py-2 bg-indigo-700 text-white rounded-md">
