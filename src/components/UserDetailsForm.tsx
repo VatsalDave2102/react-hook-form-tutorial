@@ -19,6 +19,7 @@ type FormValues = {
 	dob: Date;
 };
 
+let renderCount = 0;
 const UserDetailsForm = () => {
 	// for managing forms with ease
 	const form = useForm<FormValues>({
@@ -37,7 +38,7 @@ const UserDetailsForm = () => {
 		},
 	});
 
-	const { register, control, handleSubmit, formState } = form;
+	const { register, control, handleSubmit, formState, watch } = form;
 
 	const { errors } = formState; //formstate contains info about entire form state, helps to keep on track with user's interaction
 
@@ -52,8 +53,16 @@ const UserDetailsForm = () => {
 		console.log("Form data:", formdata);
 	};
 
+	// watch method will watch specified inputs and return their values, useful to render input value and for determining what to render by condition
+	const watchUserame = watch("username");
+
+	renderCount++;
 	return (
 		<div className="p-5 bg-white rounded-md max-w-[800px] mx-auto">
+			<h1>Render count: {renderCount}</h1>
+			<h1 className="text-3xl font-bold text-center">
+				Form owner: {watchUserame}
+			</h1>
 			<form
 				className="flex flex-col gap-y-2"
 				onSubmit={handleSubmit(onSubmitHandler)} // handleSubmit will recieve form data if form validation is successful
