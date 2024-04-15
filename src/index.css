@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body {
+	@apply bg-black h-max;
+}
 .form-control {
 	@apply flex flex-col gap-y-1;
 }

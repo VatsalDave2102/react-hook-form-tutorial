@@ -9,6 +9,7 @@ type FormValues = {
 		instagram: string;
 		twitter: string;
 	};
+	phoneNumbers: string[]; // to store two phone numbers of users
 };
 
 const UserDetailsForm = () => {
@@ -22,6 +23,7 @@ const UserDetailsForm = () => {
 				instagram: "",
 				twitter: "",
 			},
+			phoneNumbers: ["", ""],
 		},
 	});
 
@@ -35,7 +37,7 @@ const UserDetailsForm = () => {
 	};
 
 	return (
-		<div className="p-5 bg-white rounded-md">
+		<div className="p-5 bg-white rounded-md max-w-[800px] mx-auto">
 			<form
 				className="flex flex-col gap-y-2"
 				onSubmit={handleSubmit(onSubmitHandler)} // handleSubmit will recieve form data if form validation is successful
@@ -85,7 +87,10 @@ const UserDetailsForm = () => {
 						type="text"
 						id="instagram"
 						{...register("social.instagram", {
-							required: "Instagram username is required",
+							required: {
+								value: true,
+								message: "Instagram username is required",
+							},
 						})}
 					/>
 					<p className="text-red-500">{errors.social?.instagram?.message}</p>
@@ -96,10 +101,47 @@ const UserDetailsForm = () => {
 						type="text"
 						id="twitter"
 						{...register("social.twitter", {
-							required: "Twitter handle is required",
+							required: {
+								value: true,
+								message: "Twitter handle is required",
+							},
 						})}
 					/>
 					<p className="text-red-500">{errors.social?.twitter?.message}</p>
+				</div>
+
+				{/* Array fields */}
+				<div className="form-control">
+					<label htmlFor="primary-phone">Primary phone number</label>
+					<input
+						type="text"
+						id="primary-phone"
+						{...register("phoneNumbers.0", {
+							required: {
+								value: true,
+								message: "Primary phone number is required",
+							},
+						})}
+					/>
+					<p className="text-red-500">
+						{errors.phoneNumbers ? errors.phoneNumbers[0]?.message : ""}
+					</p>
+				</div>
+				<div className="form-control">
+					<label htmlFor="secondary-phone">Secondary phone number</label>
+					<input
+						type="text"
+						id="secondary-phone"
+						{...register("phoneNumbers.1", {
+							required: {
+								value: true,
+								message: "Secondary phone number is required",
+							},
+						})}
+					/>
+					<p className="text-red-500">
+						{errors.phoneNumbers ? errors.phoneNumbers[1]?.message : ""}
+					</p>
 				</div>
 				<div>
 					<button className="px-4 py-2 bg-indigo-700 text-white rounded-md">
