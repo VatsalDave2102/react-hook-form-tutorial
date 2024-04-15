@@ -1,19 +1,29 @@
 import { DevTool } from "@hookform/devtools";
 import { useForm } from "react-hook-form";
 
+// type for field values
+type FormValues = {
+	username: string;
+	email: string;
+};
+
 const UserDetailsForm = () => {
 	// for managing forms with ease
-	const form = useForm();
+	const form = useForm<FormValues>();
 
-	const { register, control } = form;
+	const { register, control, handleSubmit } = form;
 
-	// register method allows registering an input element and apply validation rules to react hook form,
-	// register itself return 4 properties, rather than this destructure register on the input itself
-	// const { name, ref, onBlur, onChange } = register("username");
+	// function to handle validated form data
+	const onSubmitHandler = (formdata: FormValues) => {
+		console.log("Form data:", formdata);
+	};
 
 	return (
 		<div className="p-5 bg-white rounded-md">
-			<form className="flex flex-col gap-y-2">
+			<form
+				className="flex flex-col gap-y-2"
+				onSubmit={handleSubmit(onSubmitHandler)} // handleSubmit will recieve form data if form validation is successful
+			>
 				<div className="form-control">
 					<label htmlFor="username">Username</label>
 					<input type="text" id="username" {...register("username")} />
