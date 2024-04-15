@@ -1,5 +1,5 @@
 import { DevTool } from "@hookform/devtools";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 
 // type for field values
 type FormValues = {
@@ -10,6 +10,11 @@ type FormValues = {
 		twitter: string;
 	};
 	phoneNumbers: string[]; // to store two phone numbers of users
+
+	// to dynamically add hobbies
+	hobbies: {
+		hobby: string;
+	}[];
 };
 
 const UserDetailsForm = () => {
@@ -24,12 +29,19 @@ const UserDetailsForm = () => {
 				twitter: "",
 			},
 			phoneNumbers: ["", ""],
+			hobbies: [{ hobby: "" }],
 		},
 	});
 
 	const { register, control, handleSubmit, formState } = form;
 
 	const { errors } = formState; //formstate contains info about entire form state, helps to keep on track with user's interaction
+
+	// useFieldArray to add fields dynamically
+	const { fields, append, remove } = useFieldArray({
+		name: "hobbies",
+		control,
+	});
 
 	// function to handle validated form data
 	const onSubmitHandler = (formdata: FormValues) => {
@@ -142,6 +154,50 @@ const UserDetailsForm = () => {
 					<p className="text-red-500">
 						{errors.phoneNumbers ? errors.phoneNumbers[1]?.message : ""}
 					</p>
+				</div>
+
+				{/* dynamic fields */}
+				<label htmlFor="hobbies">Hobbies</label>
+				<div>
+					{/* mapping through dynamic fields */}
+					{fields.map((field, index) => {
+						return (
+							<div key={field.id}>
+								<input
+									type="text"
+									className="mb-2 w-full"
+									{...register(`hobbies.${index}.hobby` as const, {
+										required: {
+											value: true,
+											message: "Field cannot be empty",
+										},
+									})}
+								/>
+								<p className="text-red-500">
+									{errors.hobbies ? errors.hobbies[index]?.hobby?.message : ""}
+								</p>
+								{/* if more than one field, show remove button */}
+								{index > 0 && (
+									<button
+										type="button"
+										onClick={() => remove(index)}
+										className="px-4 py-2 bg-indigo-700 text-white rounded-md mb-2"
+									>
+										Remove
+									</button>
+								)}
+							</div>
+						);
+					})}
+
+					{/* button to add another dynamic field */}
+					<button
+						type="button"
+						onClick={() => append({ hobby: "" })}
+						className="px-4 py-2 bg-indigo-700 text-white rounded-md "
+					>
+						Add another hobby
+					</button>
 				</div>
 				<div>
 					<button className="px-4 py-2 bg-indigo-700 text-white rounded-md">
