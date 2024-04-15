@@ -9,7 +9,13 @@ type FormValues = {
 
 const UserDetailsForm = () => {
 	// for managing forms with ease
-	const form = useForm<FormValues>();
+	const form = useForm<FormValues>({
+		// adds default values to registered fields
+		defaultValues: {
+			username: "",
+			email: "",
+		},
+	});
 
 	const { register, control, handleSubmit } = form;
 
