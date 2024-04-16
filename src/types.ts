@@ -15,4 +15,6 @@ export type FormValues = {
 	age: number;
 	dob: Date;
 	gender: "male" | "female" | "other";
+	color: ["red" | "blue" | "green"];
+	weather: "rain" | "sunny" | "cold";
 };

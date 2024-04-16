@@ -20,6 +20,8 @@ const UserDetailsForm = () => {
 			age: 0,
 			dob: new Date(),
 			gender: "female",
+			color: ["red"],
+			weather: "sunny",
 		},
 		mode: "onBlur", // validation mode, i.e. when field will be validated
 	});
@@ -237,18 +239,79 @@ const UserDetailsForm = () => {
 					/>
 					<p className="text-red-500">{errors.dob?.message}</p>
 				</div>
+
+				{/* select field */}
 				<div className="form-control">
 					<label htmlFor="gender">Gender</label>
-					<select
-						id="gender"
-						{...register("gender")}
-						className="px-4 py-2 outline-none border rounded-md focus:ring-2 focus:ring-indigo-500 bg-white"
-					>
+					<select id="gender" {...register("gender")}>
 						<option value="female">Female</option>
 						<option value="male">Male</option>
 						<option value="other">Other</option>
 					</select>
 				</div>
+
+				{/* Checkbox fields */}
+				<div className="form-control">
+					<label htmlFor="color">Favorite colors</label>
+					<div className="flex items-center gap-x-2">
+						<label htmlFor="red">Red</label>
+						<input
+							type="checkbox"
+							value="red"
+							{...register("color", {
+								required: { value: true, message: "Color is required" },
+							})}
+						/>
+						<label htmlFor="blue">Blue</label>
+
+						<input
+							type="checkbox"
+							value="blue"
+							{...register("color", {
+								required: { value: true, message: "Color is required" },
+							})}
+						/>
+						<label htmlFor="green">Green</label>
+
+						<input
+							type="checkbox"
+							value="green"
+							{...register("color", {
+								required: { value: true, message: "Color is required" },
+							})}
+						/>
+					</div>
+					<p className="text-red-500">{errors.color?.message}</p>
+				</div>
+
+				{/* Radio fields */}
+				<div className="form-control">
+					<label htmlFor="weather">Favorite Weather</label>
+					<div className="flex items-center gap-x-3">
+						<label htmlFor="sunny">Sunny</label>
+						<input
+							type="radio"
+							id="sunny"
+							value="sunny"
+							{...register("weather")}
+						/>
+						<label htmlFor="sunny">Rain</label>
+						<input
+							type="radio"
+							id="rain"
+							value="rain"
+							{...register("weather")}
+						/>
+						<label htmlFor="sunny">Cold</label>
+						<input
+							type="radio"
+							id="cold"
+							value="cold"
+							{...register("weather")}
+						/>
+					</div>
+				</div>
+
 				<div className="flex flex-start gap-x-3">
 					<button
 						className="px-4 py-2 bg-indigo-700 text-white rounded-md disabled:bg-indigo-500 disabled:cursor-default"
