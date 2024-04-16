@@ -1,24 +1,7 @@
 import { DevTool } from "@hookform/devtools";
 import { useForm, useFieldArray, FieldErrors } from "react-hook-form";
-
-// type for field values
-type FormValues = {
-	username: string;
-	email: string;
-	social: {
-		instagram: string;
-		twitter: string;
-	};
-	phoneNumbers: string[]; // to store two phone numbers of users
-
-	// to dynamically add hobbies
-	hobbies: {
-		hobby: string;
-	}[];
-	age: number;
-	dob: Date;
-	gender: "male" | "female" | "other";
-};
+import { FormValues } from "../types";
+import { FormOwner } from "./FormOwner";
 
 let renderCount = 0;
 const UserDetailsForm = () => {
@@ -41,8 +24,15 @@ const UserDetailsForm = () => {
 		mode: "onBlur", // validation mode, i.e. when field will be validated
 	});
 
-	const { register, control, handleSubmit, formState, watch, reset, trigger } =
-		form;
+	const {
+		register,
+		control,
+		handleSubmit,
+		formState,
+		reset,
+		trigger,
+		getValues,
+	} = form;
 
 	const { errors, isDirty, isValid, isSubmitting, submitCount } = formState; //formstate contains info about entire form state, helps to keep on track with user's interaction
 
@@ -62,17 +52,13 @@ const UserDetailsForm = () => {
 		console.log("Form errors:", error);
 	};
 
-	// watch method will watch specified inputs and return their values, useful to render input value and for determining what to render by condition
-	const watchUserame = watch("username");
-
+	const username = getValues("username");
 	renderCount++;
 	return (
 		<div className="p-5 bg-white rounded-md max-w-[800px] mx-auto">
 			<p>Render count: {renderCount}</p>
 			<p>Successful submit count: {submitCount}</p>
-			<h1 className="text-3xl font-bold text-center">
-				Form owner: {watchUserame}
-			</h1>
+			<FormOwner control={control} />
 			<form
 				className="flex flex-col gap-y-2"
 				onSubmit={handleSubmit(onSubmitHandler, onErrorHandler)} // handleSubmit will recieve form data if form validation is successful
@@ -125,7 +111,7 @@ const UserDetailsForm = () => {
 								value: true,
 								message: "Instagram username is required",
 							},
-							disabled: watchUserame === "",
+							disabled: username === "",
 						})}
 					/>
 					<p className="text-red-500">{errors.social?.instagram?.message}</p>
@@ -140,7 +126,7 @@ const UserDetailsForm = () => {
 								value: true,
 								message: "Twitter handle is required",
 							},
-							disabled: watchUserame === "",
+							disabled: username === "",
 						})}
 					/>
 					<p className="text-red-500">{errors.social?.twitter?.message}</p>
