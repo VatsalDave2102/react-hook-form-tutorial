@@ -38,9 +38,9 @@ const UserDetailsForm = () => {
 		},
 	});
 
-	const { register, control, handleSubmit, formState, watch } = form;
+	const { register, control, handleSubmit, formState, watch, reset } = form;
 
-	const { errors, isDirty, isValid } = formState; //formstate contains info about entire form state, helps to keep on track with user's interaction
+	const { errors, isDirty, isValid, isSubmitting, submitCount } = formState; //formstate contains info about entire form state, helps to keep on track with user's interaction
 
 	// useFieldArray to add fields dynamically
 	const { fields, append, remove } = useFieldArray({
@@ -65,6 +65,7 @@ const UserDetailsForm = () => {
 	return (
 		<div className="p-5 bg-white rounded-md max-w-[800px] mx-auto">
 			<p>Render count: {renderCount}</p>
+			<p>Successful submit count: {submitCount}</p>
 			<h1 className="text-3xl font-bold text-center">
 				Form owner: {watchUserame}
 			</h1>
@@ -246,12 +247,19 @@ const UserDetailsForm = () => {
 					/>
 					<p className="text-red-500">{errors.dob?.message}</p>
 				</div>
-				<div>
+				<div className="flex flex-start gap-x-3">
 					<button
 						className="px-4 py-2 bg-indigo-700 text-white rounded-md disabled:bg-indigo-500 disabled:cursor-default"
-						disabled={!isDirty || !isValid} // disable form if not dirty or if not valid
+						disabled={!isDirty || !isValid || isSubmitting} // disable form if not dirty or if not valid
 					>
 						Submit
+					</button>
+					<button
+						type="button"
+						className="px-4 py-2 bg-indigo-700 text-white rounded-md disabled:bg-indigo-500 disabled:cursor-default"
+						onClick={() => reset()} // reset the form values to default
+					>
+						Reset
 					</button>
 				</div>
 			</form>
