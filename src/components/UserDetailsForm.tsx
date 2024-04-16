@@ -1,5 +1,5 @@
 import { DevTool } from "@hookform/devtools";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, FieldErrors } from "react-hook-form";
 
 // type for field values
 type FormValues = {
@@ -53,6 +53,11 @@ const UserDetailsForm = () => {
 		console.log("Form data:", formdata);
 	};
 
+	// function to handle form errors
+	const onErrorHandler = (error: FieldErrors<FormValues>) => {
+		console.log("Form errors:", error);
+	};
+
 	// watch method will watch specified inputs and return their values, useful to render input value and for determining what to render by condition
 	const watchUserame = watch("username");
 
@@ -65,7 +70,7 @@ const UserDetailsForm = () => {
 			</h1>
 			<form
 				className="flex flex-col gap-y-2"
-				onSubmit={handleSubmit(onSubmitHandler)} // handleSubmit will recieve form data if form validation is successful
+				onSubmit={handleSubmit(onSubmitHandler, onErrorHandler)} // handleSubmit will recieve form data if form validation is successful
 				noValidate // disable HTML validation
 			>
 				<div className="form-control">
