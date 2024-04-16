@@ -17,6 +17,7 @@ type FormValues = {
 	}[];
 	age: number;
 	dob: Date;
+	gender: "male" | "female" | "other";
 };
 
 let renderCount = 0;
@@ -35,10 +36,13 @@ const UserDetailsForm = () => {
 			hobbies: [{ hobby: "" }],
 			age: 0,
 			dob: new Date(),
+			gender: "female",
 		},
+		mode: "onBlur", // validation mode, i.e. when field will be validated
 	});
 
-	const { register, control, handleSubmit, formState, watch, reset } = form;
+	const { register, control, handleSubmit, formState, watch, reset, trigger } =
+		form;
 
 	const { errors, isDirty, isValid, isSubmitting, submitCount } = formState; //formstate contains info about entire form state, helps to keep on track with user's interaction
 
@@ -175,7 +179,7 @@ const UserDetailsForm = () => {
 					</p>
 				</div>
 				{/* dynamic fields */}
-				<label htmlFor="hobbies">Hobbies</label>
+				<label>Hobbies</label>
 				<div>
 					{/* mapping through dynamic fields */}
 					{fields.map((field, index) => {
@@ -247,6 +251,18 @@ const UserDetailsForm = () => {
 					/>
 					<p className="text-red-500">{errors.dob?.message}</p>
 				</div>
+				<div className="form-control">
+					<label htmlFor="gender">Gender</label>
+					<select
+						id="gender"
+						{...register("gender")}
+						className="px-4 py-2 outline-none border rounded-md focus:ring-2 focus:ring-indigo-500 bg-white"
+					>
+						<option value="female">Female</option>
+						<option value="male">Male</option>
+						<option value="other">Other</option>
+					</select>
+				</div>
 				<div className="flex flex-start gap-x-3">
 					<button
 						className="px-4 py-2 bg-indigo-700 text-white rounded-md disabled:bg-indigo-500 disabled:cursor-default"
@@ -260,6 +276,13 @@ const UserDetailsForm = () => {
 						onClick={() => reset()} // reset the form values to default
 					>
 						Reset
+					</button>
+					<button
+						type="button"
+						className="px-4 py-2 bg-indigo-700 text-white rounded-md"
+						onClick={() => trigger()} // will trigger field validation, for specific fields, pass them as argument
+					>
+						Trigger Validation
 					</button>
 				</div>
 			</form>
