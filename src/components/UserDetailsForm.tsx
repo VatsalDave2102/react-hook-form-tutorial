@@ -40,7 +40,7 @@ const UserDetailsForm = () => {
 
 	const { register, control, handleSubmit, formState, watch } = form;
 
-	const { errors } = formState; //formstate contains info about entire form state, helps to keep on track with user's interaction
+	const { errors, isDirty, isValid } = formState; //formstate contains info about entire form state, helps to keep on track with user's interaction
 
 	// useFieldArray to add fields dynamically
 	const { fields, append, remove } = useFieldArray({
@@ -247,7 +247,10 @@ const UserDetailsForm = () => {
 					<p className="text-red-500">{errors.dob?.message}</p>
 				</div>
 				<div>
-					<button className="px-4 py-2 bg-indigo-700 text-white rounded-md">
+					<button
+						className="px-4 py-2 bg-indigo-700 text-white rounded-md disabled:bg-indigo-500 disabled:cursor-default"
+						disabled={!isDirty || !isValid} // disable form if not dirty or if not valid
+					>
 						Submit
 					</button>
 				</div>
