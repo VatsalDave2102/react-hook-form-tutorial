@@ -59,7 +59,7 @@ const UserDetailsForm = () => {
 	renderCount++;
 	return (
 		<div className="p-5 bg-white rounded-md max-w-[800px] mx-auto">
-			<h1>Render count: {renderCount}</h1>
+			<p>Render count: {renderCount}</p>
 			<h1 className="text-3xl font-bold text-center">
 				Form owner: {watchUserame}
 			</h1>
@@ -115,6 +115,7 @@ const UserDetailsForm = () => {
 								value: true,
 								message: "Instagram username is required",
 							},
+							disabled: watchUserame === "",
 						})}
 					/>
 					<p className="text-red-500">{errors.social?.instagram?.message}</p>
@@ -129,6 +130,7 @@ const UserDetailsForm = () => {
 								value: true,
 								message: "Twitter handle is required",
 							},
+							disabled: watchUserame === "",
 						})}
 					/>
 					<p className="text-red-500">{errors.social?.twitter?.message}</p>
