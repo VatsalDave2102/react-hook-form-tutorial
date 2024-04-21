@@ -5,7 +5,9 @@ import { FormOwner } from "./FormOwner";
 
 let renderCount = 0;
 const UserDetailsForm = () => {
-	// for managing forms with ease
+	// for managing forms with ease. It takes one object as optional argument,
+	// which allows user to configure the validation strategy before a user submits the form,
+	// validation occues during onSubmit event. For more info https://www.react-hook-form.com/api/useform/
 	const form = useForm<FormValues>({
 		// adds default values to registered fields
 		defaultValues: {
@@ -23,7 +25,7 @@ const UserDetailsForm = () => {
 			color: ["red"],
 			weather: "sunny",
 		},
-		mode: "onBlur", // validation mode, i.e. when field will be validated
+		mode: "onBlur", // validation mode, i.e. fields will get validate when user shifts focus from field
 	});
 
 	const {
@@ -36,7 +38,30 @@ const UserDetailsForm = () => {
 		getValues,
 	} = form;
 
-	const { errors, isDirty, isValid, isSubmitting, submitCount } = formState; //formstate contains info about entire form state, helps to keep on track with user's interaction
+	// register allows to register an input/select element and apply validation rules to the field,
+	// by invoking the register function and supplying input's name,
+	// we receive following methods: name, ref, onBlue, onChange.
+	// We'll use these methods to register username input field by passing them as props.
+
+	// But there's a simpler way, that is to directly destructure register function in input field, that way we can have less and clean code.
+
+	// register function also takes optional argument in the form of RegisterOptions,
+	// which is for validation properties such as required, validate, minLength, maxLength.
+	// For more info about register https://www.react-hook-form.com/api/useform/register/
+	const { name, ref, onBlur, onChange } = register("username", {
+		required: {
+			value: true,
+			message: "Username is required",
+		},
+		minLength: {
+			value: 1,
+			message: "Username must be atleast to 1 character",
+		},
+	});
+
+	// formstate contains info about entire form state, helps to keep on track with user's interaction.
+	// For more info https://www.react-hook-form.com/api/useform/formstate/
+	const { errors, isDirty, isValid, isSubmitting, submitCount } = formState;
 
 	// useFieldArray to add fields dynamically
 	const { fields, append, remove } = useFieldArray({
@@ -44,12 +69,12 @@ const UserDetailsForm = () => {
 		control,
 	});
 
-	// function to handle validated form data
+	// function to handle validated form data, if form submitted with valid data, form data will be displayed in console
 	const onSubmitHandler = (formdata: FormValues) => {
 		console.log("Form data:", formdata);
 	};
 
-	// function to handle form errors
+	// function to handle form errors, if form submitted with invalid data, form errors will be displayed in console
 	const onErrorHandler = (error: FieldErrors<FormValues>) => {
 		console.log("Form errors:", error);
 	};
@@ -63,7 +88,12 @@ const UserDetailsForm = () => {
 			<FormOwner control={control} />
 			<form
 				className="flex flex-col gap-y-2"
-				onSubmit={handleSubmit(onSubmitHandler, onErrorHandler)} // handleSubmit will recieve form data if form validation is successful
+				// handleSubmit will recieve form data if form validation is successful, provided that validation has been applied,
+				// if validation fails it receives form error object.
+				// handleSubmit also accept two callbacks for submitHandler and errorHandler respectively,
+				// these callbacks execute upon form submission and input validation
+				// For more info https://www.react-hook-form.com/api/useform/handlesubmit/
+				onSubmit={handleSubmit(onSubmitHandler, onErrorHandler)}
 				noValidate // disable HTML validation
 			>
 				<div className="form-control">
@@ -71,9 +101,10 @@ const UserDetailsForm = () => {
 					<input
 						type="text"
 						id="username"
-						{...register("username", {
-							required: { value: true, message: "Username is required" },
-						})}
+						name={name}
+						ref={ref}
+						onChange={onChange}
+						onBlur={onBlur}
 					/>
 					{/* to display error messages */}
 					<p className="text-red-500">{errors.username?.message}</p>
@@ -83,6 +114,7 @@ const UserDetailsForm = () => {
 					<input
 						type="email"
 						id="email"
+						// destructuring register function on field itself to reduce code
 						{...register("email", {
 							required: { value: true, message: "Email is required" },
 							pattern: {
